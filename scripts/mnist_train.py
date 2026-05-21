@@ -8,7 +8,6 @@ def main():
     
     trainer = MNISTTrainer(model, train_loader, test_loader, lr=0.0001)
     trainer.train(epochs=10)
-    trainer.evaluate()
 
 if __name__ == "__main__":
     main()
