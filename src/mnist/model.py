@@ -2,6 +2,12 @@ import torch
 import torch.nn as nn
 
 class CNN(nn.Module):
+    """
+    Convolutional Neural Network for MNIST digit classification.
+     - Two convolutional layers with ReLU activations and max pooling.
+     - Two fully connected layers for classification.
+     - Input: 28x28 images, Output: 10 class probabilities.
+    """
     def __init__(self):
         super().__init__()
         self.conv1 = nn.Conv2d(1, 16, kernel_size=3, padding=1)
@@ -12,6 +18,11 @@ class CNN(nn.Module):
         self.relu = nn.ReLU()
 
     def forward(self, x):
+        """
+        Defines the forward passs.
+        Applies convolution, max pooling, flattening (tensor reshaping from 2D to 1D for the linear layers)
+        and fully connected layers with ReLU activations.
+        """
         x = self.pool(self.relu(self.conv1(x)))
         x = self.pool(self.relu(self.conv2(x)))
         x = torch.flatten(x, 1)

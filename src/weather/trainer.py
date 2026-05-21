@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 class WeatherTrainer:
+    """
+    Handles the training loop and evaluation for the weather forecasting model.
+    Includes gradient clipping to stabilize LSTM training and a learning rate scheduler.
+    """
     def __init__(self, model, train_loader, test_loader, criterion, optimizer, scheduler):
         self.model = model
         self.train_loader = train_loader
@@ -13,6 +17,12 @@ class WeatherTrainer:
         self.scheduler = scheduler
 
     def train(self, epochs: int):
+        """
+        Executes the training process for a given number of epochs.
+        Applies gradient clipping (torch.nn.utils.clip_grad_norm_) with a max_norm of 1.0 
+        to prevent exploding gradients, which is a common issue when training LSTMs.
+        Steps the learning rate scheduler after each epoch.
+        """
         for epoch in range(epochs):
             self.model.train()
             total_loss = 0.0
@@ -33,6 +43,12 @@ class WeatherTrainer:
             print(f"Époque {epoch+1}/{epochs} - Perte : {avg_loss:.4f} - LR : {current_lr:.6f}")
 
     def evaluate(self, diff_mean, diff_std, tolerance_1=1.0, tolerance_2=2.0):
+        """
+        Evaluates the model on the test dataset without tracking gradients.
+        Reconstructs the actual predicted temperature by un-normalizing the predicted difference 
+        and adding it to the last known actual temperature in the sequence.
+        Calculates the success rate within specified error tolerances (e.g., ±1°C, ±2°C) 
+        """
         self.model.eval()
         predictions = []
         actuals = []

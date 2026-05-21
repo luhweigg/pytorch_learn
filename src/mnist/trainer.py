@@ -4,6 +4,10 @@ import torch.optim as optim
 import os
 
 class MNISTTrainer:
+    """
+    Handles the training, evaluation and saving loop for the MNIST model.
+    Uses CrossEntropyLoss for classification and Adam optimizer.
+    """
     def __init__(self, model, train_loader, test_loader, lr=0.001):
         self.model = model
         self.train_loader = train_loader
@@ -13,6 +17,11 @@ class MNISTTrainer:
         self.best_accuracy = 0.0
 
     def train(self, epochs: int):
+        """
+        Trains the model for a specified number of epochs.
+        Iterates through the training DataLoader, computes loss, performs backpropagation, 
+        updates weights, and triggers evaluation after each epoch.
+        """
         for epoch in range(epochs):
             self.model.train()
             total_loss = 0.0
@@ -30,6 +39,11 @@ class MNISTTrainer:
             self.evaluate()
 
     def evaluate(self):
+        """
+        Evaluates the model on the test dataset without tracking gradients (for memory efficiency).
+        Calculates accuracy based on max logit probabilities.
+        Automatically saves the model if the current accuracy surpasses the best recorded accuracy.
+        """
         self.model.eval()
         correct = 0
         total = 0
@@ -48,6 +62,10 @@ class MNISTTrainer:
             self._save_model()
 
     def _save_model(self):
+        """
+        Saves the current best model to the filesystem.
+        Creates a 'models' directory if it doesn't exist.
+        """
         os.makedirs("models", exist_ok=True)
         torch.save(self.model.state_dict(), "models/best_mnist_model.pth")
         print("Nouveau meilleur modèle sauvegardé dans models/best_mnist_model.pth.")
