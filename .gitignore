@@ -178,5 +178,6 @@ results
 models
 
 predictions.png
+mnist_learning_curve.png
 
 # End of https://www.toptal.com/developers/gitignore/api/python
